@@ -1,39 +1,35 @@
 //set const variables
-const $tableVar = $('#pixelCanvas');
-const $inputHeight = $('#inputHeight');
-const $inputWidth = $('#inputWidth');
-const $colorSelect = $('#colorPicker');
+const pixelCanvas = document.getElementById('pixelCanvas');
+const inputHeight = document.getElementById('inputHeight');
+const inputWidth = document.getElementById('inputWidth');
+const sizePicker = document.getElementById('sizePicker');
 
-
-// call makeGrid() from the submit button
-$('#sizePicker').submit(event=>{event.preventDefault();
-  makeGrid();
-  cellClick();
-});
-
-//set grid function calling values and creating grid
+//function to create the grid
 function makeGrid(){
-  let gheight = $inputHeight.val();
-  let gwidth = $inputWidth.val();
-  $tableVar.empty();
+    //set values of const variables
+    let gHeight = inputHeight.value;
+    let gWidth = inputWidth.value;
 
-  for(let i=0; i<gheight; i++){
-    $tableVar.append('<tr></tr>');
-  };
-  for(let i=0, i<gwidth; i++){
-    $('tr').append('<td></td>');
+    //create row i
+    for(let i=0; i<gHeight; i++){
+      let tr = pixelCanvas.insertRow(i);
+
+      //create column j under row i
+      for(let j=0; j<gWidth; j++){
+        let td = tr.insertCell(j);
+
+        //add listener for click on cell i,j and check the current color
+        td.addEventListener('click', function(event){
+            let color = document.getElementById('colorPicker').value;
+            event.target.style.backgroundColor = color;
+        })
+     };
   };
 };
 
-
-//click function
-function cellClick(){
-  $('td').click(event =>{
-    //let color = $colorSelect.val();
-    $(event.currentTarget).css("background-color", $colorSelect.val());
-  });
-};
-
-
-
-}
+// listener for submit button to create grid and clear previous setting
+sizePicker.addEventListener('submit', function(event){
+    event.preventDefault();
+    pixelCanvas.innerHTML = '';
+    makeGrid();
+})
